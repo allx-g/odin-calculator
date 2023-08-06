@@ -37,3 +37,14 @@ function operate(operand1, operator, operand2) {
     }
     return result;
 }
+
+function getInput(e) {
+    const button = e.target;
+    calculatorDisplay.textContent = button.getAttribute('data-key');
+}
+
+const calculatorDisplay = document.querySelector("#display-text");
+
+const buttons = document.querySelectorAll("button");
+
+buttons.forEach(button => button.addEventListener('click', getInput));
