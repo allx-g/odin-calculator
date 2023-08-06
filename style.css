@@ -1,3 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Space+Mono&family=Work+Sans:ital@0;1&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Work Sans', sans-serif;
+}
+
 body {
-    background-color: rgb(147, 147, 223);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgb(49, 49, 49);
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(83, 83, 83);
+    padding: 20px;
+    border-radius: 40px;
+    gap: 20px;
+}
+
+.display-text {
+    background-color: rgb(171, 234, 77);
+    color: rgb(2, 66, 2);
+    padding: 20px 10px 5px 10px;
+    border-radius: 30px 30px 20px 20px;
+    font-size: 40px;
+    text-align: right;
+    font-family: 'Space Mono', monospace;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.top-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.main-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.operations {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.buttons-row {
+    display: flex;
+    gap: 10px;
+}
+
+.buttons-row > button {
+    flex: 1;
+}
+
+button {
+    font-size: 40px;
+    padding: 9px 20px;
+    border-radius: 40px;
+    border: none;
+    background-color: lightgray;
+}
+
+button:active {
+    background-color: gray;
 }
