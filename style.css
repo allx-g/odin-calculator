@@ -71,6 +71,7 @@ button {
     border-radius: 40px;
     border: none;
     background-color: lightgray;
+    color: black;
 }
 
 button:active {
