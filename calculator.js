@@ -21,18 +21,36 @@ function operate(operand1, operator, operand2) {
         case '+':
             result = add(operand1, operand2);
             break;
-            case '-':
-                result = subtract(operand1, operand2);
-                break;
-                case '*':
+        case '-':
+            result = subtract(operand1, operand2);
+            break;
+        case '*':
             result = multiply(operand1, operand2);
             break;
-            case '/':
-                result = divide(operand1, operand2);
-                break;
-            }
-            return result;
-        }
+        case '/':
+            result = divide(operand1, operand2);
+            break;
+    }
+    
+    return result;
+}
+
+
+function isOperation(string) {
+    const POSSIBLE_OPERATIONS = [
+        "add",
+        "subtract",
+        "multiply",
+        "divide",
+        "equals",
+        "clear"
+    ];
+
+    if (POSSIBLE_OPERATIONS.includes(string)) {
+        return true;
+    }
+    return false;
+}
         
 function manageCalculation(e) {
     const button = e.target;
@@ -52,8 +70,8 @@ function manageCalculation(e) {
                 break;
         }
     }
-    if (currentInput === "add") {
-        currentOperand = (currentOperand == 1) ? 2 : 1; 
+    if (isOperation(currentInput)) {
+        currentOperand = (currentOperand === 1) ? 2 : 1; 
         console.log(currentOperand);
     }
 }
@@ -68,3 +86,4 @@ let operand1 = "";
 let operand2 = "";
 let operator = "";
 let currentOperand = 1;
+let result = 0;
