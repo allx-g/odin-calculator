@@ -103,6 +103,10 @@ function manageCalculation(e) {
 
     if (isNumber(currentInput)) {
         const num = currentInput;
+        if (operands[currentOperand].isCalculated) {
+            // Reset to subsitute new value with calculated value.
+            operands[currentOperand].value = "0";
+        }
         updateOperand(num);
         updateDisplay();
     }
