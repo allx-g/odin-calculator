@@ -1,17 +1,15 @@
-function add(a, b) {
-    return a + b;
-}
+function add(a, b) { return a + b; }
 
-function subtract(a, b) {
-    return a - b;
-}
+function subtract(a, b) { return a - b; }
 
-function multiply(a, b) {
-    return a * b;
-}
+function multiply(a, b) { return a * b; }
 
 function divide(a, b) {
-    return a / b;
+    // Division by zero is not allowed, so return a funny message.
+    if (b === 0) {
+        return DIVIDE_BY_ZERO_ERROR;
+    }
+    return a / b; 
 }
 
 
@@ -88,7 +86,6 @@ function clear() {
 function updateOperand(num) {
     if (operands[currentOperand].value === "0" || operands[currentOperand].isCalculated) {
         operands[currentOperand].value = num;
-        console.log('override');
     }
     else {
         operands[currentOperand].value += num;
@@ -112,23 +109,24 @@ function manageCalculation(e) {
         operands[0].isCalculated = false;
         updateDisplay();
     }
-    console.log('operation'); 
+    console.log('operation');
     if (isArithmeticOperation(currentInput)) {
-        operator = currentInput;
-        if (currentOperand === 1) {
-            console.log('chained operation')
-            result = operate(operands[0].value, operator, operands[1].value);
-            operands[0].value = result.toString();
-            operands[1].value = "0";
-            currentOperand = 0;
-            updateDisplay();
-            currentOperand = 1;
+        if (operands[currentOperand].value !== DIVIDE_BY_ZERO_ERROR) {
+            operator = currentInput;
+            if (currentOperand === 1) {
+                console.log('chained operation')
+                result = operate(operands[0].value, operator, operands[1].value);
+                operands[0].value = result.toString();
+                operands[1].value = "0";
+                currentOperand = 0;
+                updateDisplay();
+                currentOperand = 1;
+            }
+            if (currentOperand === 0) {
+                switchCurrentOperand();
+            }
         }
-        if (currentOperand === 0) {
-            switchCurrentOperand();
-        }
-        
-    }
+    } 
     if (isCalculatorOperation(currentInput)) {
         const calculatorOperation = currentInput;
         switch(calculatorOperation) {
@@ -149,6 +147,7 @@ function manageCalculation(e) {
 const calculatorDisplay = document.querySelector("#display-text");
 const buttons = document.querySelectorAll("button");
 buttons.forEach(button => button.addEventListener('click', manageCalculation));
+const DIVIDE_BY_ZERO_ERROR = "OUCHIES";
 
 let currentInput;
 // A calculator operation has two operands and an operator
