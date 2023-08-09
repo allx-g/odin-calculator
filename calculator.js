@@ -36,6 +36,7 @@ function operate(operand1, operator, operand2) {
 
     stringResult = result.toString();
     operands[0].value = result;
+    operands[0].isCalculated = true;
     console.log('result: ', result);
     return result;
 }
@@ -72,6 +73,7 @@ function clear() {
         operands[0].value = "0";
         operands[1].value = "0";
         currentOperand = 0;
+        result = 0;
         operands[1].cleared = false;
         console.log('superly cleared');
     }
@@ -104,9 +106,21 @@ function manageCalculation(e) {
         updateOperand(num);
         updateDisplay();
     }
+    console.log('operation'); 
     if (isArithmeticOperation(currentInput)) {
         operator = currentInput;
-        switchCurrentOperand();
+        if (currentOperand === 1) {
+            console.log('chained operation')
+            result = operate(operands[0].value, operator, operands[1].value);
+            operands[0].value = result.toString();
+            operands[1].value = "0";
+            currentOperand = 0;
+            updateDisplay();
+            currentOperand = 1;
+        }
+        if (currentOperand === 0) {
+            switchCurrentOperand();
+        }
         
     }
     if (isCalculatorOperation(currentInput)) {
@@ -131,7 +145,7 @@ buttons.forEach(button => button.addEventListener('click', manageCalculation));
 
 let currentInput;
 // A calculator operation has two operands and an operator
-let operands = [{ value: "0" }, { value: "0", cleared: false }]
+let operands = [{ value: "0", isCalculated: false}, { value: "0", cleared: false }]
 let operator = "";
 let currentOperand = 0;
 let result = 0;
