@@ -37,6 +37,7 @@ function operate(operand1, operator, operand2) {
     stringResult = result.toString();
     operands[0].value = result;
     operands[0].isCalculated = true;
+    operands[1].cleared = false;
     console.log('result: ', result);
     return result;
 }
@@ -107,6 +108,7 @@ function manageCalculation(e) {
             // Reset to subsitute new value with calculated value.
             operands[currentOperand].value = "0";
         }
+        operands[1].cleared = false;
         updateOperand(num);
         updateDisplay();
     }
