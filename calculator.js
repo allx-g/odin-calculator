@@ -35,21 +35,46 @@ function operate(operand1, operator, operand2) {
     return result;
 }
 
+function isNumber(string) {
+    return +currentInput === +currentInput;
+}
 
-function isOperation(string) {
-    const POSSIBLE_OPERATIONS = [
+function isArithmeticOperation(string) {
+    const ARITHMETIC_OPERATIONS = [
         "add",
         "subtract",
         "multiply",
-        "divide",
-        "equals",
-        "clear"
+        "divide"
     ];
 
-    if (POSSIBLE_OPERATIONS.includes(string)) {
-        return true;
-    }
-    return false;
+    return ARITHMETIC_OPERATIONS.includes(string);
+}
+
+function isCalculatorOperation(string) {
+    const CALCULATOR_OPERATIONS = ["equals", "clear"];
+
+    return CALCULATOR_OPERATIONS.includes(string);
+}
+
+function updateDisplay() {
+    calculatorDisplay.textContent = operands[currentOperand];
+}
+
+function clear() {
+    operands[currentOperand] = "0";
+    updateDisplay();
+    console.log('cleared screen');
+}
+
+function updateOperand(num) {
+    (operands[currentOperand] === "0") ? 
+    operands[currentOperand] = num :
+    operands[currentOperand] += num;
+
+}
+
+function switchCurrentOperand() {
+    currentOperand = (currentOperand === 0) ? 1 : 0;
 }
         
 function manageCalculation(e) {
@@ -58,21 +83,20 @@ function manageCalculation(e) {
     console.log("input: ", currentInput);
 
 
-    if (+currentInput === +currentInput) {
-        switch (currentOperand) {
-            case 1:
-                operand1 += currentInput;
-                console.log("op1: ", operand1);
-                break;
-            case 2:
-                operand2 += currentInput;
-                console.log("op2: ", operand2);
-                break;
-        }
+    if (isNumber(currentInput)) {
+        const num = currentInput;
+        updateOperand(num);
+        updateDisplay();
     }
-    if (isOperation(currentInput)) {
-        currentOperand = (currentOperand === 1) ? 2 : 1; 
-        console.log(currentOperand);
+    if (isArithmeticOperation(currentInput)) {
+        switchCurrentOperand();
+    }
+    if (isCalculatorOperation(currentInput)) {
+        const calculatorOperation = currentInput;
+        switch(calculatorOperation) {
+            case 'clear':
+                clear();
+        }
     }
 }
 
@@ -82,8 +106,7 @@ buttons.forEach(button => button.addEventListener('click', manageCalculation));
 
 let currentInput;
 // A calculator operation has two operands and an operator
-let operand1 = "";
-let operand2 = "";
+let operands = ["0", "0"]
 let operator = "";
-let currentOperand = 1;
+let currentOperand = 0;
 let result = 0;
