@@ -35,7 +35,7 @@ function operate(operand1, operator, operand2) {
     }
 
     stringResult = result.toString();
-    operands[0].value = result;
+    operands[0].value = stringResult;
     operands[0].isCalculated = true;
     operands[1].cleared = false;
     console.log('result: ', result);
@@ -86,9 +86,13 @@ function clear() {
 }
 
 function updateOperand(num) {
-    (operands[currentOperand].value === "0") ? 
-    operands[currentOperand].value = num :
-    operands[currentOperand].value += num;
+    if (operands[currentOperand].value === "0" || operands[currentOperand].isCalculated) {
+        operands[currentOperand].value = num;
+        console.log('override');
+    }
+    else {
+        operands[currentOperand].value += num;
+    }
 
 }
 
@@ -100,16 +104,12 @@ function manageCalculation(e) {
     const button = e.target;
     currentInput = button.getAttribute('data-key');
     console.log("input: ", currentInput);
-
-
+    
     if (isNumber(currentInput)) {
         const num = currentInput;
-        if (operands[currentOperand].isCalculated) {
-            // Reset to subsitute new value with calculated value.
-            operands[currentOperand].value = "0";
-        }
-        operands[1].cleared = false;
         updateOperand(num);
+        operands[1].cleared = false;
+        operands[0].isCalculated = false;
         updateDisplay();
     }
     console.log('operation'); 
@@ -143,6 +143,7 @@ function manageCalculation(e) {
                 break;
         }
     }
+    console.log("operands: ", operands);
 }
 
 const calculatorDisplay = document.querySelector("#display-text");
