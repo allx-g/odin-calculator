@@ -17,21 +17,26 @@ function divide(a, b) {
 
 function operate(operand1, operator, operand2) {
     let result;
+    num1 = parseInt(operand1);
+    num2 = parseInt(operand2);
     switch (operator) {
-        case '+':
-            result = add(operand1, operand2);
+        case 'add':
+            result = add(num1, num2);
             break;
-        case '-':
-            result = subtract(operand1, operand2);
+        case 'subtract':
+            result = subtract(num1, num2);
             break;
-        case '*':
-            result = multiply(operand1, operand2);
+        case 'multiply':
+            result = multiply(num1, num2);
             break;
-        case '/':
-            result = divide(operand1, operand2);
+        case 'divide':
+            result = divide(num1, num2);
             break;
     }
-    
+
+    stringResult = result.toString();
+    operands[0].value = result;
+    console.log('result: ', result);
     return result;
 }
 
@@ -100,13 +105,22 @@ function manageCalculation(e) {
         updateDisplay();
     }
     if (isArithmeticOperation(currentInput)) {
+        operator = currentInput;
         switchCurrentOperand();
+        
     }
     if (isCalculatorOperation(currentInput)) {
         const calculatorOperation = currentInput;
         switch(calculatorOperation) {
             case 'clear':
                 clear();
+                break;
+            case 'equals':
+                result = operate(operands[0].value, operator, operands[1].value);
+                currentOperand = 0;
+                operands[1].value = "0";
+                updateDisplay();
+                break;
         }
     }
 }
