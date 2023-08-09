@@ -57,19 +57,30 @@ function isCalculatorOperation(string) {
 }
 
 function updateDisplay() {
-    calculatorDisplay.textContent = operands[currentOperand];
+    calculatorDisplay.textContent = operands[currentOperand].value;
 }
 
 function clear() {
-    operands[currentOperand] = "0";
+    operands[currentOperand].value = "0";
+
+    if (currentOperand === 1 && operands[1].cleared) {
+        operands[0].value = "0";
+        operands[1].value = "0";
+        currentOperand = 0;
+        operands[1].cleared = false;
+        console.log('superly cleared');
+    }
+    if (currentOperand === 1) {
+        operands[1].cleared = true;
+    }
     updateDisplay();
-    console.log('cleared screen');
+    console.log('cleared');
 }
 
 function updateOperand(num) {
-    (operands[currentOperand] === "0") ? 
-    operands[currentOperand] = num :
-    operands[currentOperand] += num;
+    (operands[currentOperand].value === "0") ? 
+    operands[currentOperand].value = num :
+    operands[currentOperand].value += num;
 
 }
 
@@ -106,7 +117,7 @@ buttons.forEach(button => button.addEventListener('click', manageCalculation));
 
 let currentInput;
 // A calculator operation has two operands and an operator
-let operands = ["0", "0"]
+let operands = [{ value: "0" }, { value: "0", cleared: false }]
 let operator = "";
 let currentOperand = 0;
 let result = 0;
