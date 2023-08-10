@@ -112,7 +112,6 @@ function manageCalculation(e) {
     console.log('operation');
     if (isArithmeticOperation(currentInput)) {
         if (operands[currentOperand].value !== DIVIDE_BY_ZERO_ERROR) {
-            operator = currentInput;
             if (currentOperand === 1) {
                 console.log('chained operation')
                 result = operate(operands[0].value, operator, operands[1].value);
@@ -125,6 +124,7 @@ function manageCalculation(e) {
             if (currentOperand === 0) {
                 switchCurrentOperand();
             }
+            operator = currentInput;
         }
     } 
     if (isCalculatorOperation(currentInput)) {
