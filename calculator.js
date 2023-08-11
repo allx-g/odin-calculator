@@ -15,8 +15,8 @@ function divide(a, b) {
 
 function operate(operand1, operator, operand2) {
     let result;
-    num1 = parseInt(operand1);
-    num2 = parseInt(operand2);
+    num1 = parseFloat(operand1);
+    num2 = parseFloat(operand2);
     switch (operator) {
         case 'add':
             result = add(num1, num2);
@@ -33,11 +33,33 @@ function operate(operand1, operator, operand2) {
     }
 
     stringResult = result.toString();
+    if (stringResult.includes(".")) {
+        decimalPlaces = getDecimalPlaces(stringResult);
+        let roundedResult = +parseFloat(stringResult).toFixed(decimalPlaces);
+        stringResult = roundedResult.toString();
+    }
+    else if (stringResult.length > NUMBER_LENGTH_LIMIT) {
+        console.log('converting to exponential')
+        let exponentialResult = parseInt(stringResult).toExponential(3);
+        console.log(exponentialResult);
+        stringResult = exponentialResult.toString();
+    }
     operands[0].value = stringResult;
     operands[0].isCalculated = true;
     operands[1].cleared = false;
     console.log('result: ', result);
     return result;
+}
+
+function getDecimalPlaces(numString) {
+    let count = 0;
+    for (let i = 0; i < numString.length; i++) {
+        count++;
+        if(numString.charAt(i) === ".") {
+            break;
+        }
+    }
+    return NUMBER_LENGTH_LIMIT - count;
 }
 
 function isNumber(string) {
@@ -101,6 +123,7 @@ function manageCalculation(e) {
     const button = e.target;
     currentInput = button.getAttribute('data-key');
     console.log("input: ", currentInput);
+    console.log("currentOperand: ", currentOperand);
     
     if (isNumber(currentInput)) {
         const num = currentInput;
@@ -141,7 +164,8 @@ function manageCalculation(e) {
                 break;
         }
     }
-    console.log("operands: ", operands);
+    console.table("operands: ", operands);
+    console.log("operand after: ", currentOperand);
 }
 
 const calculatorDisplay = document.querySelector("#display-text");
