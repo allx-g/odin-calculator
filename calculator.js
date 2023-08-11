@@ -12,7 +12,6 @@ function divide(a, b) {
     return a / b; 
 }
 
-
 function operate(operand1, operator, operand2) {
     let result;
     num1 = parseFloat(operand1);
@@ -105,12 +104,12 @@ function clear() {
     console.log('cleared');
 }
 
-function updateOperand(num) {
+function updateOperand(numToAdd) {
     if (operands[currentOperand].value === "0" || operands[currentOperand].isCalculated) {
-        operands[currentOperand].value = num;
+        operands[currentOperand].value = numToAdd; // Replace the number displayed;
     }
     else if (operands[currentOperand].value.length < NUMBER_LENGTH_LIMIT) {
-        operands[currentOperand].value += num;
+        operands[currentOperand].value += numToAdd; // Concatenate to the number displayed;
     }
 
 }
@@ -121,18 +120,17 @@ function switchCurrentOperand() {
         
 function manageCalculation(e) {
     const button = e.target;
-    currentInput = button.getAttribute('data-key');
-    console.log("input: ", currentInput);
-    console.log("currentOperand: ", currentOperand);
-    
-    if (isNumber(currentInput)) {
-        const num = currentInput;
+    input = button.getAttribute('data-key');
+
+    if (isNumber(input)) {
+        const num = input;
+        
         updateOperand(num);
         operands[1].cleared = false;
         operands[0].isCalculated = false;
         updateDisplay();
     }
-    else if (isArithmeticOperation(currentInput)) {
+    else if (isArithmeticOperation(input)) {
         if (operands[currentOperand].value !== DIVIDE_BY_ZERO_ERROR) {
             if (currentOperand === 1) {
                 console.log('chained operation')
@@ -146,11 +144,11 @@ function manageCalculation(e) {
             if (currentOperand === 0) {
                 switchCurrentOperand();
             }
-            operator = currentInput;
+            operator = input;
         }
     } 
-    else if (isCalculatorOperation(currentInput)) {
-        const calculatorOperation = currentInput;
+    else if (isCalculatorOperation(input)) {
+        const calculatorOperation = input;
         switch(calculatorOperation) {
             case 'clear':
                 clear();
@@ -207,9 +205,18 @@ document.addEventListener('keydown', processKeyboardInput);
 const DIVIDE_BY_ZERO_ERROR = "OUCHIES";
 const NUMBER_LENGTH_LIMIT = 9;
 
-let currentInput;
+let input;
 // A calculator operation has two operands and an operator
-let operands = [{ value: "0", isCalculated: false}, { value: "0", cleared: false }]
+let operands = [
+    { 
+        value: "0", 
+        isCalculated: false
+    },
+    {
+        value: "0",
+        cleared: false 
+    }
+];
 let operator = "";
 let currentOperand = 0;
 let result = 0;
