@@ -166,16 +166,11 @@ function manageCalculation(e) {
 }
 
 function processKeyboardInput(e) {
-    const keyValue = e.key;
-    const POSSIBLE_OPERATOR_KEYS = ["+", "-", "/", "*", "Enter"];
-    
-    if (isNumber(keyValue)) {
-        const digit = keyValue;
+    function clickCorrespondingNumber(e, digit) {
         e.preventDefault();
         document.querySelector(`button[data-key="${digit}"]`).click();
     }
-    else if (POSSIBLE_OPERATOR_KEYS.includes(keyValue)) {
-        const operation = keyValue;
+    function clickCorrespondingOperation(e, operation) {
         e.preventDefault();
         if (operation === "Enter" || operation === "=") {
             document.querySelector(`button[data-key="equals"]`).click();
@@ -194,6 +189,18 @@ function processKeyboardInput(e) {
                 document.querySelector(`button[data-key="multiply"]`).click();
                 break;
         }
+    }
+
+    const keyValue = e.key;
+    const POSSIBLE_OPERATIONS = ["+", "-", "/", "*", "Enter"];
+    
+    if (isNumber(keyValue)) {
+        const digit = keyValue;
+        clickCorrespondingNumber(e, digit)
+    }
+    else if (POSSIBLE_OPERATIONS.includes(keyValue)) {
+        const operation = keyValue;
+        clickCorrespondingOperation(e, operation);
     }
 }
 
