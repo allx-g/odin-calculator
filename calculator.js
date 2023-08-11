@@ -63,7 +63,7 @@ function getDecimalPlaces(numString) {
 }
 
 function isNumber(string) {
-    return +currentInput === +currentInput;
+    return /^\d+$/.test(string);
 }
 
 function isArithmeticOperation(string) {
@@ -168,9 +168,75 @@ function manageCalculation(e) {
     console.log("operand after: ", currentOperand);
 }
 
+function processKeyboardInput(e) {
+    const code = e.code;
+    console.log("key pressed: ", code);
+    const key = e.key;
+    console.log('event.key: ', key);
+    const digit = getDigit(code);
+    console.log(digit);
+    const hasDigit = digit >= 0;
+
+    const POSSIBLE_OPERATOR_KEYS = ["+", "-", "/", "*", "Enter"];
+    1
+    if (hasDigit) {
+        e.preventDefault();
+        document.querySelector(`button[data-key="${digit}"]`).click();
+    }
+    else if (POSSIBLE_OPERATOR_KEYS.includes(key)) {
+        e.preventDefault();
+        if (key === "Enter" || key === "=") {
+            document.querySelector(`button[data-key="equals"]`).click();
+        }
+        switch (key) {
+            case "+":
+                document.querySelector(`button[data-key="add"]`).click();
+                break;
+            case "-":
+                document.querySelector(`button[data-key="subtract"]`).click();
+                break;
+            case "/":
+                document.querySelector(`button[data-key="divide"]`).click();
+                break;
+            case "*":
+                document.querySelector(`button[data-key="multiply"]`).click();
+                break;
+        }
+    }
+    
+
+    function extractValue(e) {
+        const code = e.code;
+        const key = e.key;
+        const digit = getDigit(code);
+        const hasDigit = digit >= 0;
+
+        if (hasDigit) {
+            return digit;
+        }
+        else if (POSSIBLE_OPERATOR_KEYS.includes(key)) {
+            return key;
+        }
+
+        return -1;
+    }
+
+    function getDigit(keyCode) {
+        for (let i = 0; i < keyCode.length; i++) {
+            const char = keyCode.charAt(i);
+            if (isNumber(char)) {
+                return parseInt(char);
+            }
+        }
+        return -1;
+    }
+}
+
 const calculatorDisplay = document.querySelector("#display-text");
 const buttons = document.querySelectorAll("button");
 buttons.forEach(button => button.addEventListener('click', manageCalculation));
+document.addEventListener('keydown', processKeyboardInput);
+
 const DIVIDE_BY_ZERO_ERROR = "OUCHIES";
 const NUMBER_LENGTH_LIMIT = 9;
 
