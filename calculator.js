@@ -132,8 +132,7 @@ function manageCalculation(e) {
         operands[0].isCalculated = false;
         updateDisplay();
     }
-    console.log('operation');
-    if (isArithmeticOperation(currentInput)) {
+    else if (isArithmeticOperation(currentInput)) {
         if (operands[currentOperand].value !== DIVIDE_BY_ZERO_ERROR) {
             if (currentOperand === 1) {
                 console.log('chained operation')
@@ -150,7 +149,7 @@ function manageCalculation(e) {
             operator = currentInput;
         }
     } 
-    if (isCalculatorOperation(currentInput)) {
+    else if (isCalculatorOperation(currentInput)) {
         const calculatorOperation = currentInput;
         switch(calculatorOperation) {
             case 'clear':
@@ -169,26 +168,21 @@ function manageCalculation(e) {
 }
 
 function processKeyboardInput(e) {
-    const code = e.code;
-    console.log("key pressed: ", code);
-    const key = e.key;
-    console.log('event.key: ', key);
-    const digit = getDigit(code);
-    console.log(digit);
-    const hasDigit = digit >= 0;
-
+    const keyValue = e.key;
     const POSSIBLE_OPERATOR_KEYS = ["+", "-", "/", "*", "Enter"];
-    1
-    if (hasDigit) {
+    
+    if (isNumber(keyValue)) {
+        const digit = keyValue;
         e.preventDefault();
         document.querySelector(`button[data-key="${digit}"]`).click();
     }
-    else if (POSSIBLE_OPERATOR_KEYS.includes(key)) {
+    else if (POSSIBLE_OPERATOR_KEYS.includes(keyValue)) {
+        const operation = keyValue;
         e.preventDefault();
-        if (key === "Enter" || key === "=") {
+        if (operation === "Enter" || operation === "=") {
             document.querySelector(`button[data-key="equals"]`).click();
         }
-        switch (key) {
+        switch (operation) {
             case "+":
                 document.querySelector(`button[data-key="add"]`).click();
                 break;
@@ -202,33 +196,6 @@ function processKeyboardInput(e) {
                 document.querySelector(`button[data-key="multiply"]`).click();
                 break;
         }
-    }
-    
-
-    function extractValue(e) {
-        const code = e.code;
-        const key = e.key;
-        const digit = getDigit(code);
-        const hasDigit = digit >= 0;
-
-        if (hasDigit) {
-            return digit;
-        }
-        else if (POSSIBLE_OPERATOR_KEYS.includes(key)) {
-            return key;
-        }
-
-        return -1;
-    }
-
-    function getDigit(keyCode) {
-        for (let i = 0; i < keyCode.length; i++) {
-            const char = keyCode.charAt(i);
-            if (isNumber(char)) {
-                return parseInt(char);
-            }
-        }
-        return -1;
     }
 }
 
