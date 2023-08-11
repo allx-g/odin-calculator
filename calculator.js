@@ -87,7 +87,7 @@ function updateOperand(num) {
     if (operands[currentOperand].value === "0" || operands[currentOperand].isCalculated) {
         operands[currentOperand].value = num;
     }
-    else {
+    else if (operands[currentOperand].value.length < NUMBER_LENGTH_LIMIT) {
         operands[currentOperand].value += num;
     }
 
@@ -148,6 +148,7 @@ const calculatorDisplay = document.querySelector("#display-text");
 const buttons = document.querySelectorAll("button");
 buttons.forEach(button => button.addEventListener('click', manageCalculation));
 const DIVIDE_BY_ZERO_ERROR = "OUCHIES";
+const NUMBER_LENGTH_LIMIT = 9;
 
 let currentInput;
 // A calculator operation has two operands and an operator
