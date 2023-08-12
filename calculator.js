@@ -86,33 +86,38 @@ function updateDisplay() {
 function clear() {
     operands[currentOperand].value = "0";
 
-    if (currentOperand === 1 && operands[1].cleared) {
-        operands[0].value = "0";
-        operands[1].value = "0";
-        currentOperand = 0;
+    if (currentOperand === SECOND_OPERAND && operands[SECOND_OPERAND].cleared) {
+        operands[FIRST_OPERAND].value = "0";
+        operands[SECOND_OPERAND].value = "0";
+        currentOperand = FIRST_OPERAND;
         result = 0;
         operands[1].cleared = false;
         console.log('superly cleared');
     }
-    if (currentOperand === 1) {
-        operands[1].cleared = true;
+    if (currentOperand === SECOND_OPERAND) {
+        operands[SECOND_OPERAND].cleared = true;
     }
     updateDisplay();
     console.log('cleared');
 }
 
-function updateOperand(numToAdd) {
+function updateOperandValue(numToAdd) {
     if (operands[currentOperand].value === "0" || operands[currentOperand].isCalculated) {
         operands[currentOperand].value = numToAdd; // Replace the number displayed;
+        operands[currentOperand].isCalculated = false;
     }
     else if (operands[currentOperand].value.length < NUMBER_LENGTH_LIMIT) {
         operands[currentOperand].value += numToAdd; // Concatenate to the number displayed;
     }
-
+    if (currentOperand === SECOND_OPERAND) {
+        operands[SECOND_OPERAND].cleared = false;
+    }
 }
 
 function switchCurrentOperand() {
-    currentOperand = (currentOperand === 0) ? 1 : 0;
+    currentOperand = (currentOperand === FIRST_OPERAND) ?
+        SECOND_OPERAND :
+        FIRST_OPERAND;
 }
         
 function manageCalculation(e) {
@@ -123,10 +128,7 @@ function manageCalculation(e) {
 
     if (isNumber(input)) {
         const num = input;
-        
-        updateOperand(num);
-        operands[1].cleared = false;
-        operands[0].isCalculated = false;
+        updateOperandValue(num);
         updateDisplay();
     }
     else if (isArithmeticOperation(input)) {
@@ -147,20 +149,22 @@ function manageCalculation(e) {
     } 
     else if (isCalculatorOperation(input)) {
         const calculatorOperation = input;
+        const operatorWasGiven = operator != '';
         switch(calculatorOperation) {
             case 'clear':
                 clear();
                 break;
             case 'equals':
-                result = operate(firstOperandValue, operator, secondOperandValue);
-                currentOperand = 0;
-                operands[SECOND_OPERAND].value = "0";
-                updateDisplay();
+                if (operatorWasGiven) {
+                    result = operate(firstOperandValue, operator, secondOperandValue);
+                    currentOperand = 0;
+                    operands[SECOND_OPERAND].value = "0";
+                    updateDisplay();
+                }
                 break;
         }
     }
-    console.table("operands: ", operands);
-    console.log("operand after: ", currentOperand);
+    console.log("operands: ", operands);
 }
 
 function processKeyboardInput(e) {
