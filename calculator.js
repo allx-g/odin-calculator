@@ -38,16 +38,13 @@ function operate(operand1, operator, operand2) {
         stringResult = roundedResult.toString();
     }
     else if (stringResult.length > NUMBER_LENGTH_LIMIT) {
-        console.log('converting to exponential')
         let exponentialResult = parseInt(stringResult).toExponential(3);
-        console.log(exponentialResult);
         stringResult = exponentialResult.toString();
     }
-    operands[0].value = stringResult;
-    operands[0].isCalculated = true;
-    operands[1].cleared = false;
-    console.log('result: ', result);
-    return result;
+    operands[FIRST_OPERAND].value = stringResult;
+    operands[FIRST_OPERAND].isCalculated = true;
+    operands[SECOND_OPERAND].cleared = false;
+    return stringResult;
 }
 
 function getDecimalPlaces(numString) {
@@ -121,6 +118,8 @@ function switchCurrentOperand() {
 function manageCalculation(e) {
     const button = e.target;
     input = button.getAttribute('data-key');
+    const firstOperandValue = operands[FIRST_OPERAND].value;
+    const secondOperandValue = operands[SECOND_OPERAND].value;
 
     if (isNumber(input)) {
         const num = input;
@@ -132,16 +131,15 @@ function manageCalculation(e) {
     }
     else if (isArithmeticOperation(input)) {
         if (operands[currentOperand].value !== DIVIDE_BY_ZERO_ERROR) {
-            
-            if (currentOperand === FIRST_OPERAND) {
-                result = operate(operands[0].value, operator, operands[1].value);
-                operands[0].value = result.toString();
-                operands[1].value = "0";
-                currentOperand = 0;
+            if (currentOperand === SECOND_OPERAND) {
+                result = operate(firstOperandValue, operator, secondOperandValue);
+                operands[FIRST_OPERAND].value = result;
+                operands[SECOND_OPERAND].value = "0";
+                currentOperand = FIRST_OPERAND;
                 updateDisplay();
-                currentOperand = 1;
+                currentOperand = SECOND_OPERAND;
             }
-            if (currentOperand === 0) {
+            if (currentOperand === FIRST_OPERAND) {
                 switchCurrentOperand();
             }
             operator = input;
@@ -154,9 +152,9 @@ function manageCalculation(e) {
                 clear();
                 break;
             case 'equals':
-                result = operate(operands[0].value, operator, operands[1].value);
+                result = operate(firstOperandValue, operator, secondOperandValue);
                 currentOperand = 0;
-                operands[1].value = "0";
+                operands[SECOND_OPERAND].value = "0";
                 updateDisplay();
                 break;
         }
