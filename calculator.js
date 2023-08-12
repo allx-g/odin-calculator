@@ -41,7 +41,6 @@ function operate(operand1, operator, operand2) {
         let exponentialResult = parseInt(stringResult).toExponential(3);
         stringResult = exponentialResult.toString();
     }
-    operands[FIRST_OPERAND].value = stringResult;
     operands[FIRST_OPERAND].isCalculated = true;
     operands[SECOND_OPERAND].cleared = false;
     return stringResult;
@@ -119,12 +118,27 @@ function switchCurrentOperand() {
         SECOND_OPERAND :
         FIRST_OPERAND;
 }
-        
-function manageCalculation(e) {
-    const button = e.target;
-    input = button.getAttribute('data-key');
+
+function evaluateCurrentExpression() {
     const firstOperandValue = operands[FIRST_OPERAND].value;
     const secondOperandValue = operands[SECOND_OPERAND].value;
+
+    result = operate(firstOperandValue, operator, secondOperandValue);
+    operands[FIRST_OPERAND].value = result;
+    currentOperand = FIRST_OPERAND;
+    operands[SECOND_OPERAND].value = "0";
+}
+        
+function manageCalculation(e) {
+    function chainOperation() {
+        evaluateCurrentExpression();
+        updateDisplay();
+        // Prepare input for the second operand.
+        currentOperand = SECOND_OPERAND;
+    }
+
+    const button = e.target;
+    input = button.getAttribute('data-key');
 
     if (isNumber(input)) {
         const num = input;
@@ -134,14 +148,9 @@ function manageCalculation(e) {
     else if (isArithmeticOperation(input)) {
         if (operands[currentOperand].value !== DIVIDE_BY_ZERO_ERROR) {
             if (currentOperand === SECOND_OPERAND) {
-                result = operate(firstOperandValue, operator, secondOperandValue);
-                operands[FIRST_OPERAND].value = result;
-                operands[SECOND_OPERAND].value = "0";
-                currentOperand = FIRST_OPERAND;
-                updateDisplay();
-                currentOperand = SECOND_OPERAND;
+                chainOperation();
             }
-            if (currentOperand === FIRST_OPERAND) {
+            else if (currentOperand === FIRST_OPERAND) {
                 switchCurrentOperand();
             }
             operator = input;
@@ -156,9 +165,7 @@ function manageCalculation(e) {
                 break;
             case 'equals':
                 if (operatorWasGiven) {
-                    result = operate(firstOperandValue, operator, secondOperandValue);
-                    currentOperand = 0;
-                    operands[SECOND_OPERAND].value = "0";
+                    evaluateCurrentExpression();
                     updateDisplay();
                 }
                 break;
