@@ -132,8 +132,8 @@ function manageCalculation(e) {
     }
     else if (isArithmeticOperation(input)) {
         if (operands[currentOperand].value !== DIVIDE_BY_ZERO_ERROR) {
-            if (currentOperand === 1) {
-                console.log('chained operation')
+            
+            if (currentOperand === FIRST_OPERAND) {
                 result = operate(operands[0].value, operator, operands[1].value);
                 operands[0].value = result.toString();
                 operands[1].value = "0";
@@ -211,6 +211,8 @@ document.addEventListener('keydown', processKeyboardInput);
 
 const DIVIDE_BY_ZERO_ERROR = "OUCHIES";
 const NUMBER_LENGTH_LIMIT = 9;
+const FIRST_OPERAND = 0;
+const SECOND_OPERAND = 1;
 
 let input;
 // A calculator operation has two operands and an operator
@@ -225,5 +227,5 @@ let operands = [
     }
 ];
 let operator = "";
-let currentOperand = 0;
+let currentOperand = FIRST_OPERAND;
 let result = 0;
