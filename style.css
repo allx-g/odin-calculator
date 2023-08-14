@@ -94,4 +94,5 @@ button.active-operation {
 
 button:active {
     background-color: #dcdcdc;
+    color: #2c2c2c;
 }
