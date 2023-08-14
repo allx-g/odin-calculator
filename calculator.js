@@ -32,14 +32,16 @@ function operate(operand1, operator, operand2) {
     }
 
     stringResult = result.toString();
-    if (stringResult.includes(".")) {
+    console.log('result: ', stringResult);
+    if (stringResult.length > NUMBER_LENGTH_LIMIT) {
+        console.log("big num: ", stringResult);
+        let exponentialResult = parseFloat(stringResult).toExponential(3);
+        stringResult = exponentialResult.toString();
+    }
+    else if (stringResult.includes(".")) {
         decimalPlaces = getDecimalPlaces(stringResult);
         let roundedResult = +parseFloat(stringResult).toFixed(decimalPlaces);
         stringResult = roundedResult.toString();
-    }
-    else if (stringResult.length > NUMBER_LENGTH_LIMIT) {
-        let exponentialResult = parseInt(stringResult).toExponential(3);
-        stringResult = exponentialResult.toString();
     }
     operands[FIRST_OPERAND].isCalculated = true;
     operands[SECOND_OPERAND].cleared = false;
