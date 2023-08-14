@@ -87,6 +87,11 @@ button {
     transition: background-color 0.1s;
 }
 
+button.active-operation {
+    background-color: white;
+    color: #6a6aec;
+}
+
 button:active {
     background-color: #dcdcdc;
 }

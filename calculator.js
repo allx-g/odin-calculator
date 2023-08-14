@@ -86,6 +86,7 @@ function clear() {
     operands[currentOperand].value = "0";
 
     if (currentOperand === SECOND_OPERAND && operands[SECOND_OPERAND].cleared) {
+        turnOffCurrentOperationButton();
         operands[FIRST_OPERAND].value = "0";
         operands[SECOND_OPERAND].value = "0";
         currentOperand = FIRST_OPERAND;
@@ -123,10 +124,25 @@ function evaluateCurrentExpression() {
     const firstOperandValue = operands[FIRST_OPERAND].value;
     const secondOperandValue = operands[SECOND_OPERAND].value;
 
+    turnOffCurrentOperationButton();
     result = operate(firstOperandValue, operator, secondOperandValue);
     operands[FIRST_OPERAND].value = result;
     currentOperand = FIRST_OPERAND;
     operands[SECOND_OPERAND].value = "0";
+}
+
+function turnOnCurrentOperationButton(e) {
+    const operationButton = e.target;
+    if (!operationButton.classList.contains('active-operation')) {
+        operationButton.classList.add('active-operation');
+    }
+}
+
+function turnOffCurrentOperationButton() {
+    if (operator != '') {
+        const currentOperationButtton = operationsContainer.querySelector(`button[data-key="${operator}"`);
+        currentOperationButtton.classList.remove('active-operation');
+    }
 }
         
 function manageCalculation(e) {
@@ -137,11 +153,13 @@ function manageCalculation(e) {
         currentOperand = SECOND_OPERAND;
     }
 
+
     const button = e.target;
     input = button.getAttribute('data-key');
 
     if (isNumber(input)) {
         const num = input;
+        turnOffCurrentOperationButton();
         updateOperandValue(num);
         updateDisplay();
     }
@@ -153,12 +171,14 @@ function manageCalculation(e) {
             else if (currentOperand === FIRST_OPERAND) {
                 switchCurrentOperand();
             }
+            turnOnCurrentOperationButton(e);
             operator = input;
         }
     } 
     else if (isCalculatorOperation(input)) {
         const calculatorOperation = input;
         const operatorWasGiven = operator != '';
+
         switch(calculatorOperation) {
             case 'clear':
                 clear();
@@ -215,7 +235,10 @@ function processKeyboardInput(e) {
 
 const calculatorDisplay = document.querySelector("#display-text");
 const buttons = document.querySelectorAll("button");
-buttons.forEach(button => button.addEventListener('click', manageCalculation));
+const operationsContainer = document.querySelector('.operations');
+buttons.forEach(button => {
+    button.addEventListener('click', manageCalculation);
+});
 document.addEventListener('keydown', processKeyboardInput);
 
 const DIVIDE_BY_ZERO_ERROR = "OUCHIES";
