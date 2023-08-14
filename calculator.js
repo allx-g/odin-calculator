@@ -44,6 +44,7 @@ function operate(operand1, operator, operand2) {
         stringResult = roundedResult.toString();
     }
     operands[FIRST_OPERAND].isCalculated = true;
+    operands[SECOND_OPERAND].isInput = false;
     operands[SECOND_OPERAND].cleared = false;
     return stringResult;
 }
@@ -98,6 +99,7 @@ function clear() {
     }
     if (currentOperand === SECOND_OPERAND) {
         operands[SECOND_OPERAND].cleared = true;
+        operands[SECOND_OPERAND].isInput = false;
     }
     updateDisplay();
     console.log('cleared');
@@ -113,6 +115,7 @@ function updateOperandValue(numToAdd) {
     }
     if (currentOperand === SECOND_OPERAND) {
         operands[SECOND_OPERAND].cleared = false;
+        operands[SECOND_OPERAND].isInput = true;
     }
 }
 
@@ -166,13 +169,15 @@ function manageCalculation(e) {
         updateDisplay();
     }
     else if (isArithmeticOperation(input)) {
-        if (operands[currentOperand].value !== DIVIDE_BY_ZERO_ERROR) {
-            if (currentOperand === SECOND_OPERAND) {
+        const operand = operands[currentOperand];
+        if (operand.value !== DIVIDE_BY_ZERO_ERROR) {
+            if (currentOperand === SECOND_OPERAND && operand.isInput) {
                 chainOperation();
             }
             else if (currentOperand === FIRST_OPERAND) {
                 switchCurrentOperand();
             }
+            turnOffCurrentOperationButton();
             turnOnCurrentOperationButton(e);
             operator = input;
         }
@@ -208,16 +213,16 @@ function processKeyboardInput(e) {
         }
         switch (operation) {
             case "+":
-                document.querySelector(`button[data-key="add"]`).click();
+                operationsContainer.querySelector(`button[data-key="add"]`).click();
                 break;
             case "-":
-                document.querySelector(`button[data-key="subtract"]`).click();
+                operationsContainer.querySelector(`button[data-key="subtract"]`).click();
                 break;
             case "/":
-                document.querySelector(`button[data-key="divide"]`).click();
+                operationsContainer.querySelector(`button[data-key="divide"]`).click();
                 break;
             case "*":
-                document.querySelector(`button[data-key="multiply"]`).click();
+                operationsContainer.querySelector(`button[data-key="multiply"]`).click();
                 break;
         }
     }
@@ -257,7 +262,8 @@ let operands = [
     },
     {
         value: "0",
-        cleared: false 
+        cleared: false, 
+        isInput: false
     }
 ];
 let operator = "";
