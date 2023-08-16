@@ -36,7 +36,6 @@ body {
 
 .buttons-container {
     display: flex;
-    flex-direction: column;
     gap: 10px;
 }
 
@@ -66,14 +65,25 @@ body {
     flex: 1;
 }
 
+button[data-key="0"], button[data-key="clear"] {
+    flex: 4;
+}
 .operations > button {
     background-color: #6a6aec;
     color: white;
 }
 
-button[data-key="clear"], button[data-key="equals"] {
+button[data-key="clear"], button[data-key="equals"], button[data-key="undo"] {
     background-color: #a0a0a0;
     color: rgb(52, 52, 52);
+}
+
+button[data-key="undo"] > img {
+    width: 25px;
+}
+
+button[data-key="."] {
+    flex: 1;
 }
 
 button {
