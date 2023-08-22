@@ -6,6 +6,38 @@ function multiply(a, b) { return a * b; }
 
 function divide(a, b) { return (b === 0) ? DIVIDE_BY_ZERO_ERROR : a / b; }
 
+function getDecimalPlaces(numString) {
+    let count = 0;
+    for (let i = 0; i < numString.length; i++) {
+        count++;
+        if(numString.charAt(i) === ".") {
+            break;
+        }
+    }
+    return NUMBER_LENGTH_LIMIT - count;
+}
+
+function shortenResult(stringResult) {
+    if (stringResult.length > NUMBER_LENGTH_LIMIT) {
+        console.log("big num: ", stringResult);
+        let exponentialResult = parseFloat(stringResult).toExponential(3);
+        stringResult = exponentialResult.toString();
+    }
+    else if (stringResult.includes(".")) {
+        decimalPlaces = getDecimalPlaces(stringResult);
+        let roundedResult = +parseFloat(stringResult).toFixed(decimalPlaces);
+        stringResult = roundedResult.toString();
+    }
+
+    return stringResult;
+}
+
+function resetOperandStatuses() {
+    operands[FIRST_OPERAND].isCalculated = true;
+    operands[SECOND_OPERAND].isInput = false;
+    operands[SECOND_OPERAND].cleared = false;
+}
+
 function operate(operand1, operator, operand2) {
     let result;
     num1 = parseFloat(operand1);
@@ -25,34 +57,14 @@ function operate(operand1, operator, operand2) {
             break;
     }
 
-    stringResult = result.toString();
+    let stringResult = result.toString();
     console.log('result: ', stringResult);
-    if (stringResult.length > NUMBER_LENGTH_LIMIT) {
-        console.log("big num: ", stringResult);
-        let exponentialResult = parseFloat(stringResult).toExponential(3);
-        stringResult = exponentialResult.toString();
-    }
-    else if (stringResult.includes(".")) {
-        decimalPlaces = getDecimalPlaces(stringResult);
-        let roundedResult = +parseFloat(stringResult).toFixed(decimalPlaces);
-        stringResult = roundedResult.toString();
-    }
-    operands[FIRST_OPERAND].isCalculated = true;
-    operands[SECOND_OPERAND].isInput = false;
-    operands[SECOND_OPERAND].cleared = false;
+    stringResult = shortenResult(stringResult);
+    resetOperandStatuses();
     return stringResult;
 }
 
-function getDecimalPlaces(numString) {
-    let count = 0;
-    for (let i = 0; i < numString.length; i++) {
-        count++;
-        if(numString.charAt(i) === ".") {
-            break;
-        }
-    }
-    return NUMBER_LENGTH_LIMIT - count;
-}
+
 
 function isNumber(string) {
     return /^\d+$/.test(string) || string === ".";
