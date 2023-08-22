@@ -8,8 +8,10 @@
 
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 2em;
     height: 100vh;
     background-color: rgb(49, 49, 49);
 }
@@ -22,6 +24,12 @@ body {
     border-radius: 40px;
     gap: 20px;
     touch-action: manipulation;
+    transition: box-shadow 0.4s ease;
+    box-shadow: 0 0 10px 10px #2c2c2c;
+}
+
+.calculator:hover {
+    box-shadow: 0 0 20px 10px #353578;
 }
 
 .display-text {
@@ -108,4 +116,8 @@ button.active-operation {
 button:active {
     background-color: #dcdcdc;
     color: #2c2c2c;
+}
+
+.bottom-text {
+    color: #e6e6e6;
 }
