@@ -61,7 +61,7 @@ function getDecimalPlaces(numString) {
 }
 
 function isNumber(string) {
-    return /^\d+$/.test(string);
+    return /^\d+$/.test(string) || string === ".";
 }
 
 function isArithmeticOperation(string) {
