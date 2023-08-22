@@ -3,7 +3,7 @@ Calculator
 
 A small, web-based calculator for all your calculation needs. It's math time.
 
-![Image of a calculator with blue operation buttons, gray numbers and decimals and white calculator function buttons.](https://github.com/allx-g/odin-calculator/calculator-preview.png)
+![Image of a calculator with blue operation buttons, gray numbers and decimals and white calculator function buttons.](https://github.com/allx-g/odin-calculator/blob/main/calculator-preview.png)
 
 Built with HTML, CSS and vanilla JavaScript.
 
