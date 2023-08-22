@@ -177,8 +177,15 @@ function manageCalculation(e) {
 
     if (isNumber(input)) {
         const num = input;
+        const inputIsNotDecimal = num !== ".";
+        const currentValueHasNoDecimal = num === "." && !operands[currentOperand].value.includes(".");
+
         turnOffCurrentOperationButton();
-        updateOperandValue(num);
+
+        if (inputIsNotDecimal || currentValueHasNoDecimal) {
+            updateOperandValue(num);
+        }
+
         updateDisplay();
     }
     else if (isArithmeticOperation(input)) {
