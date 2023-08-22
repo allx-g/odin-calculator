@@ -76,8 +76,6 @@ function isArithmeticOperation(string) {
 }
 
 function isCalculatorOperation(string) {
-    const CALCULATOR_OPERATIONS = ["equals", "clear"];
-
     return CALCULATOR_OPERATIONS.includes(string);
 }
 
@@ -103,6 +101,21 @@ function clear() {
     }
     updateDisplay();
     console.log('cleared');
+}
+
+function undo() {
+    console.log('inside undo function');
+    if (operands[currentOperand].value !== "0") {
+        const operandLength = operands[currentOperand].value.length;
+
+        if (operandLength === 1 || operands[currentOperand].isCalculated) {
+            operands[currentOperand].value = "0";
+        }
+        if (operandLength > 1) {
+            operands[currentOperand].value = operands[currentOperand].value.slice(0, operandLength - 1);
+        }
+    }
+    updateDisplay();
 }
 
 function updateOperandValue(numToAdd) {
@@ -196,6 +209,9 @@ function manageCalculation(e) {
                     updateDisplay();
                 }
                 break;
+            case 'undo':
+                undo();
+                break;
         }
     }
     console.log("operands: ", operands);
@@ -209,7 +225,10 @@ function processKeyboardInput(e) {
     function clickCorrespondingOperation(e, operation) {
         e.preventDefault();
         if (operation === "Enter" || operation === "=") {
-            document.querySelector(`button[data-key="equals"]`).click();
+            document.querySelector('button[data-key="equals"]').click();
+        }
+        if (operation === "Backspace") {
+            document.querySelector('button[data-key="undo"]').click();
         }
         switch (operation) {
             case "+":
@@ -228,13 +247,13 @@ function processKeyboardInput(e) {
     }
 
     const keyValue = e.key;
-    const POSSIBLE_OPERATIONS = ["+", "-", "/", "*", "Enter"];
+    const POSSIBLE_OPERATION_KEYS = ["+", "-", "/", "*", "Enter", "Backspace"];
     
     if (isNumber(keyValue)) {
         const digit = keyValue;
         clickCorrespondingNumber(e, digit)
     }
-    else if (POSSIBLE_OPERATIONS.includes(keyValue)) {
+    else if (POSSIBLE_OPERATION_KEYS.includes(keyValue)) {
         const operation = keyValue;
         clickCorrespondingOperation(e, operation);
     }
@@ -252,6 +271,7 @@ const DIVIDE_BY_ZERO_ERROR = "OUCHIES";
 const NUMBER_LENGTH_LIMIT = 9;
 const FIRST_OPERAND = 0;
 const SECOND_OPERAND = 1;
+const CALCULATOR_OPERATIONS = ['equals', 'clear', 'undo'];
 
 let input;
 // A calculator operation has two operands and an operator

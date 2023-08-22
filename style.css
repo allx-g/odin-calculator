@@ -78,8 +78,11 @@ button[data-key="clear"], button[data-key="equals"], button[data-key="undo"] {
     color: rgb(52, 52, 52);
 }
 
-button[data-key="undo"] > img {
-    width: 25px;
+button[data-key="undo"] {
+    background-image: url("img/undo.svg");
+    background-size: 0.85em;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 button[data-key="."] {
