@@ -4,13 +4,7 @@ function subtract(a, b) { return a - b; }
 
 function multiply(a, b) { return a * b; }
 
-function divide(a, b) {
-    // Division by zero is not allowed, so return a funny message.
-    if (b === 0) {
-        return DIVIDE_BY_ZERO_ERROR;
-    }
-    return a / b; 
-}
+function divide(a, b) { return (b === 0) ? DIVIDE_BY_ZERO_ERROR : a / b; }
 
 function operate(operand1, operator, operand2) {
     let result;
