@@ -10,23 +10,21 @@ function getDecimalPlaces(numString) {
     let count = 0;
     for (let i = 0; i < numString.length; i++) {
         count++;
-        if(numString.charAt(i) === ".") {
-            break;
-        }
+        if (numString.charAt(i) === ".") { break; }
     }
     return NUMBER_LENGTH_LIMIT - count;
 }
 
 function shortenResult(stringResult) {
-    if (stringResult.length > NUMBER_LENGTH_LIMIT) {
+    if (stringResult.includes(".") && !stringResult.includes('e')) {
+        const decimalPlaces = getDecimalPlaces(stringResult);
+        let roundedResult = +parseFloat(stringResult).toFixed(decimalPlaces);
+        stringResult = roundedResult.toString();
+    }
+    else if (stringResult.length > NUMBER_LENGTH_LIMIT || stringResult.includes('e')) {
         console.log("big num: ", stringResult);
         let exponentialResult = parseFloat(stringResult).toExponential(3);
         stringResult = exponentialResult.toString();
-    }
-    else if (stringResult.includes(".")) {
-        decimalPlaces = getDecimalPlaces(stringResult);
-        let roundedResult = +parseFloat(stringResult).toFixed(decimalPlaces);
-        stringResult = roundedResult.toString();
     }
 
     return stringResult;
